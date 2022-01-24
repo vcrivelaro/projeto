@@ -35,6 +35,16 @@ function Navbar() {
                                     cadastrar tema
                                 </Typography>
                             </Box>
+                            <Box mx={1} style={{ cursor: "pointer" }}>
+                                <Typography variant="h6" color="inherit">
+                                    Sobre nós
+                                </Typography>
+                            </Box>
+                            <Box mx={1} style={{ cursor: "pointer" }}>
+                                <Typography variant="h6" color="inherit">
+                                    Contato
+                                </Typography>
+                            </Box>
                         </Box>
                     </Box>
                     
