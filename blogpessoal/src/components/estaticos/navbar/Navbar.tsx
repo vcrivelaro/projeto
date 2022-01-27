@@ -1,63 +1,93 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography, Box } from '@material-ui/core';
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useHistory } from 'react-router-dom'
 import './Navbar.css'
+import { useSelector } from 'react-redux';
+import { TokenState } from '../../../store/tokens/tokensReducer';
+import { useDispatch } from "react-redux";
+import { addToken } from '../../../store/tokens/actions';
+import {toast} from 'react-toastify';
+
 function Navbar() {
-    return (
-        <>
-            <AppBar position="static">
-                <Toolbar variant="dense">
-                <Box style={{ cursor: "pointer" }} >
-                            <Typography variant="h5" color="inherit">
-                                BlogPessoal
-                            </Typography>
-                        </Box>
-                    <Box width="100%" display="flex" justifyContent="space-between">
-                    <Box>
-                        <Box display="flex" justifyContent="start">
-                            <Box mx={1} style={{ cursor: "pointer" }}>
+    const token = useSelector<TokenState, TokenState["tokens"]>(
+        (state) => state.tokens
+      );
+    let history = useHistory();
+    const dispatch = useDispatch();
+    
+    function goLogout(){
+        dispatch(addToken(''));
+        toast.info('Usuário deslogado', {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: false,
+            theme: "colored",
+            progress: undefined,
+        });
+        history.push('/login')
+    }
+
+    var navbarComponent;
+
+    if(token != ""){
+        navbarComponent = <AppBar position="static">
+        <Toolbar variant="dense">
+            <Box style={{ cursor: "pointer" }} >
+                <Typography variant="h5" color="inherit">
+                    BlogPessoal
+                </Typography>
+            </Box>
+            <Box width="100%" display="flex" justifyContent="space-between">
+                <Box>
+                    <Box display="flex" justifyContent="start">
+                        <Link to="/home" className="text-decorator-none">
+                            <Box mx={1} className='cursor'>
                                 <Typography variant="h6" color="inherit">
                                     home
                                 </Typography>
                             </Box>
-                            <Box mx={1} style={{ cursor: "pointer" }}>
+                        </Link>
+                        <Link to="/posts" className="text-decorator-none">
+                            <Box mx={1} className='cursor'>
                                 <Typography variant="h6" color="inherit">
                                     postagens
                                 </Typography>
                             </Box>
-                            <Box mx={1} style={{ cursor: "pointer" }}>
+                        </Link>
+                        <Link to="/temas" className="text-decorator-none">
+                            <Box mx={1} className='cursor'>
                                 <Typography variant="h6" color="inherit">
                                     temas
                                 </Typography>
                             </Box>
-                            <Box mx={1} style={{ cursor: "pointer" }}>
+                        </Link>
+
+                        <Link to="/formularioTema" className="text-decorator-none">
+                            <Box mx={1} className='cursor'>
                                 <Typography variant="h6" color="inherit">
                                     cadastrar tema
                                 </Typography>
                             </Box>
-                            <Box mx={1} style={{ cursor: "pointer" }}>
-                                <Typography variant="h6" color="inherit">
-                                    Sobre nós
-                                </Typography>
-                            </Box>
-                            <Box mx={1} style={{ cursor: "pointer" }}>
-                                <Typography variant="h6" color="inherit">
-                                    Contato
-                                </Typography>
-                            </Box>
-                        </Box>
+                        </Link>
                     </Box>
-                    
-                    <Link to={"/login"} className="text-decorator-none">
-                    <Box mx={1} style={{ cursor: "pointer" }}>
-                        <Typography variant="h6" color="inherit">
-                            logout
-                        </Typography>
-                    </Box>
-                    </Link>
-                    </Box>
-                </Toolbar>
-            </AppBar>
+                </Box>
+
+                <Box mx={1} className='cursor' onClick={goLogout}>
+                    <Typography variant="h6" color="inherit">
+                        logout
+                    </Typography>
+                </Box>
+            </Box>
+        </Toolbar>
+    </AppBar>
+    }
+    return (
+        <>
+            {navbarComponent}
         </>
     )
 }
